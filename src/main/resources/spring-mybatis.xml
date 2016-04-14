@@ -22,16 +22,33 @@
 
     <!-- 自动扫描 -->
     <context:component-scan base-package="org.devdoc.sf" />
-	<mvc:annotation-driven/>
+    <mvc:annotation-driven />
+	<context:annotation-config />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
     <!-- 引入配置文件 -->
-    <bean id="PropertiesConfigurer"
+    <bean id="propertyConfigurer"
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>classpath:log4j.properties</value>
                 <value>classpath:jdbc.properties</value>
             </list>
+        </property>
+    </bean>
+
+	<!-- FreeMarker配置 -->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/tmpl/" />
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="number_format">0.##########</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="classic_compatible">true</prop>
+                <prop key="template_exception_handler">ignore</prop>
+            </props>
         </property>
     </bean>
 
@@ -43,6 +60,13 @@
         <property name="password" value="${jdbc.password}" />
         <property name="initialPoolSize" value="${jdbc.initialPoolSize}" />
         <property name="maxPoolSize" value="${jdbc.maxPoolSize}" />
+        <property name="minPoolSize" value="${jdbc.minPoolSize}" />
+        <property name="maxStatements" value="${jdbc.maxStatements}" />
+        <property name="maxIdleTime" value="${jdbc.maxIdleTime}" />
+        <property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}" />
+        <property name="testConnectionOnCheckin" value="true" />
+        <property name="testConnectionOnCheckout" value="false" />
+        <property name="preferredTestQuery" value="SELECT 1 FROM DUAL" />
     </bean>
 
     <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
